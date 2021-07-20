@@ -9,6 +9,7 @@ export default function Header ({
     setSelectedCarPairs
 }) {
     const [errorMessage, setErrorMessage] = useState('');
+    const [tempSelectedCarPairs, setTempSelectedCarPairs] = useState(0)
 
     function handleValidation() {
         let isValid = true
@@ -19,17 +20,26 @@ export default function Header ({
         return isValid
     }
 
+    function startNewGame() {
+        if (tempSelectedCarPairs !== 0) {
+            setSelectedCarPairs(tempSelectedCarPairs);
+        }
+    }
+
     return (
         <header className="mb-3">
             <img id="logo" src={Logo} alt="logo" />
             {isGaming &&
-               <div>
+               <div className="menu">
                    <SelectMenu
-                        setSelectedCarPairs={setSelectedCarPairs}
+                        setSelectedCarPairs={setTempSelectedCarPairs}
                         handleValidation={handleValidation}
                         errorMessage={errorMessage}
                         setErrorMessage={setErrorMessage}
                    />
+                   <div id="btn-container">
+                        <button className="btn btn-warning start-button" onClick={startNewGame}>Start new game</button>
+                   </div>
                </div>
             }
             <div></div>

@@ -19,21 +19,15 @@ export default function Game({
 
     const [shuffleCards, setShuffleCards] = useState([]);
     const [currentTire, setCurrentTire] = useState(0);
-    const [best, setBest] = useState(null)
+    const [best, setBest] = useState(undefined)
 
     useEffect(() => {
         getRandomCards()
-    }, [])
+    }, [selectedCarPairs])
 
     useEffect(() => {
-        let isEnd = true
-        shuffleCards.forEach(card => {
-            if(card.state !== 'find') {
-                isEnd = false
-            }
-        })
-        if (isEnd) {
-            if (best === null) {
+        if (shuffleCards.filter(card => card.state === 'find').length === selectedCarPairs*2) {
+            if (best === undefined) {
                 setBest(currentTire)
             }
             if (currentTire < best) {
@@ -45,7 +39,7 @@ export default function Game({
         }
     }, [shuffleCards])
 
-    function getRandomCards() {
+    function getRandomCards () {
         setCurrentTire(0)
         const tempForGamingCards = [];
         while (tempForGamingCards.length !== selectedCarPairs) {
@@ -145,10 +139,10 @@ export default function Game({
                         shuffleCards.map((card, index) => (
                             <div key={index} className="card" onClick={() => onClick(index)}>
                                 {
-                                    card.state === 'on' && <img src={getImage(card.name)} height="160px" width="160px" />
+                                    card.state === 'on' && <img className="pic-img" src={getImage(card.name)} height="160px" width="160px" />
                                 }
                                 {
-                                    card.state === 'find' && <img src={getImage(card.name)} height="160px" width="160px" style={{ opacity: 0.6 }} />
+                                    card.state === 'find' && <img className="pic-img" src={getImage(card.name)} height="160px" width="160px" style={{ opacity: 0.6 }} />
                                 }
                             </div>
                         ))

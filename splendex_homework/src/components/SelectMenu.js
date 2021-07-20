@@ -27,7 +27,7 @@ export default function SelectMenu({
     return (        
 
         <div className="form-group start-form-group">
-            <label htmlFor="deck-size">Deck size</label>
+            <label id="deck-label" htmlFor="deck-size">Deck size</label>
             <select
                 className={`form-control ${errorMessage === '' ? '' : 'is-invalid'}`}
                 name="deck-size"

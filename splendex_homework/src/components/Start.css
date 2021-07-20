@@ -15,9 +15,14 @@
 }
 
 .start-button {
-    color: white
+    color: white;
+    align-items: flex-end;
 }
 
 .start-button:hover {
     color: white
+}
+
+#deck-label {
+    color: gray
 }

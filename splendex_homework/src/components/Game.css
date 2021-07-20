@@ -6,7 +6,7 @@
 .card {
     background-color: white;
     height: 200px;
-    min-width: 200px;
+    width: 200px;
     border: solid 1px gray;
     cursor: pointer;
     margin: 5px;
@@ -16,4 +16,17 @@
 .game-stats {
     display: flex;
     justify-content: space-around;
+}
+
+@media only screen and (max-width: 770px) {
+    .card {
+        height: 100px;
+        width: 100px;
+        padding: 18px
+    }
+
+    .pic-img {
+        width: 70px;
+        height: 70px;
+    }
 }
