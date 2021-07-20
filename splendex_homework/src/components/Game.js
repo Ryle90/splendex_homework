@@ -18,7 +18,8 @@ export default function Game({
     selectedCarPairs
 }) {
 
-    const [shuffleCards, setShuffleCards] = useState([])
+    const [shuffleCards, setShuffleCards] = useState([]);
+    const [currentCard, setCurrentCard] = useState(-1);
 
     function shuffle(array) {
         let currentIndex = array.length;
@@ -46,7 +47,7 @@ export default function Game({
 
         const tempForGamingCardsLength = tempForGamingCards.length;
         for (let i = 0; i < tempForGamingCardsLength; i++) {
-            tempForGamingCards.push(tempForGamingCardsLength[i])
+            tempForGamingCards.push(tempForGamingCards[i])
         }
 
         const shuffleCardsTemp = shuffle(tempForGamingCards);
@@ -55,15 +56,45 @@ export default function Game({
 
     }, [])
 
+    function showCard(index) {
+        setCurrentCard(index)
+    }
+
+    function getImage(card) {
+        switch (card) {
+            case 'angular':
+                return angular;
+            case 'd3':
+                return d3;
+            case 'jenkins':
+                return jenkins;
+            case 'postcss':
+                return postcss;
+            case 'react':
+                return react;
+            case 'redux':
+                return redux;
+            case 'sass':
+                return sass;
+            case 'splendex':
+                return splendex;
+            case 'ts':
+                return ts;
+            case 'webpack':
+                return webpack;
+        }
+        return angular;
+    }
 
     return (
         <div className="container card-container">
             <div className="scene">
                 {shuffleCards.length !== 0 &&
                     shuffleCards.map((card, index) => (
-                        <div key={index} className="card">
-                            <div className="card__face card__face--front"></div>
-                            <div className="card__face card__face--back">back</div>
+                        <div key={index} className="card" onClick={() => {showCard(index)}}>
+                            {currentCard === index &&
+                                <img src={getImage(card)} alt="pic" />
+                            }
                         </div>
                     ))
                 }
