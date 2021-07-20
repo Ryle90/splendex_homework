@@ -1,0 +1,23 @@
+.start-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.start-form-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#start-title {
+    margin: 100px auto
+}
+
+.start-button {
+    color: white
+}
+
+.start-button:hover {
+    color: white
+}
