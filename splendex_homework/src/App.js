@@ -11,7 +11,11 @@ function App() {
 
   return (
     <div className="App">
-      <Header />
+      <Header 
+        isGaming={isGaming}
+        setSelectedCarPairs={setSelectedCarPairs}
+        setIsGaming={setIsGaming}
+      />
       {!isGaming &&
         <Start
           selectedCarPairs={selectedCarPairs}

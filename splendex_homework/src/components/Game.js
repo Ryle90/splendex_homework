@@ -1,6 +1,7 @@
 import './Game.css';
 import { useEffect, useState } from "react";
 
+import nameOfCards from "../utils/cards";
 import angular from '../assets/cards/angular.png';
 import d3 from '../assets/cards/d3.png';
 import jenkins from '../assets/cards/jenkins.png';
@@ -12,14 +13,58 @@ import splendex from '../assets/cards/splendex.png';
 import ts from '../assets/cards/ts.png';
 import webpack from '../assets/cards/webpack.png';
 
-import nameOfCards from "../utils/cards";
-
 export default function Game({
     selectedCarPairs
 }) {
 
     const [shuffleCards, setShuffleCards] = useState([]);
-    const [currentCard, setCurrentCard] = useState(-1);
+    const [currentTire, setCurrentTire] = useState(0);
+    const [best, setBest] = useState(null)
+
+    useEffect(() => {
+        getRandomCards()
+    }, [])
+
+    useEffect(() => {
+        let isEnd = true
+        shuffleCards.forEach(card => {
+            if(card.state !== 'find') {
+                isEnd = false
+            }
+        })
+        if (isEnd) {
+            if (best === null) {
+                setBest(currentTire)
+            }
+            if (currentTire < best) {
+                setBest(currentTire)
+            }
+            setTimeout(() => {
+                getRandomCards()
+            }, 1500)
+        }
+    }, [shuffleCards])
+
+    function getRandomCards() {
+        setCurrentTire(0)
+        const tempForGamingCards = [];
+        while (tempForGamingCards.length !== selectedCarPairs) {
+            let random = Math.floor(Math.random() * nameOfCards.length);
+            let cardName = nameOfCards[random]
+            if (!tempForGamingCards.map(x => x.name).includes(cardName)) {
+                tempForGamingCards.push({ name: cardName, state: 'off' })
+            }
+        }
+
+        const tempForGamingCardsLength = tempForGamingCards.length;
+        for (let i = 0; i < tempForGamingCardsLength; i++) {
+            tempForGamingCards.push({ name: tempForGamingCards[i].name, state: 'off' })
+        }
+
+        const shuffleCardsTemp = shuffle(tempForGamingCards);
+
+        setShuffleCards(shuffleCardsTemp)
+    }
 
     function shuffle(array) {
         let currentIndex = array.length;
@@ -29,35 +74,10 @@ export default function Game({
             currentIndex--;
 
             [array[currentIndex], array[randomIndex]] = [
-            array[randomIndex], array[currentIndex]];
+                array[randomIndex], array[currentIndex]];
         }
 
         return array;
-    }
-
-    useEffect(() => {
-        const tempForGamingCards = [];
-        while (tempForGamingCards.length !== selectedCarPairs) {
-            let random = Math.floor(Math.random() * nameOfCards.length);
-            let cardName = nameOfCards[random]
-            if (!tempForGamingCards.includes(cardName)) {
-                tempForGamingCards.push(cardName)
-            }
-        }
-
-        const tempForGamingCardsLength = tempForGamingCards.length;
-        for (let i = 0; i < tempForGamingCardsLength; i++) {
-            tempForGamingCards.push(tempForGamingCards[i])
-        }
-
-        const shuffleCardsTemp = shuffle(tempForGamingCards);
-
-        setShuffleCards(shuffleCardsTemp)
-
-    }, [])
-
-    function showCard(index) {
-        setCurrentCard(index)
     }
 
     function getImage(card) {
@@ -83,21 +103,57 @@ export default function Game({
             case 'webpack':
                 return webpack;
         }
-        return angular;
+    }
+
+    function onClick(index) {
+        if (shuffleCards.filter(x => x.state === 'on').length === 2)
+            return;
+
+        if (shuffleCards[index].state === 'on' || shuffleCards[index].state === 'find')
+            return;
+
+        shuffleCards[index].state = 'on';
+        const on = shuffleCards.filter(x => x.state === 'on');
+
+        setTimeout(() => {
+            if (on.length === 2) {
+                setCurrentTire(currentTire + 1)
+                if (on[0].name === on[1].name) {
+                    on[0].state = 'find';
+                    on[1].state = 'find';
+                } else {
+                    on[0].state = 'off';
+                    on[1].state = 'off';
+                }
+            }
+            setShuffleCards([...shuffleCards]);
+        }, 1500)
+
+        setShuffleCards([...shuffleCards]);
     }
 
     return (
-        <div className="container card-container">
-            <div className="scene">
-                {shuffleCards.length !== 0 &&
-                    shuffleCards.map((card, index) => (
-                        <div key={index} className="card" onClick={() => {showCard(index)}}>
-                            {currentCard === index &&
-                                <img src={getImage(card)} alt="pic" />
-                            }
-                        </div>
-                    ))
-                }
+        <div className="container">
+            <div className="game-stats mb-3">
+                <p>Current tires: <strong>{currentTire}</strong></p>
+                <p>Best: {best !== null && <strong>{best}</strong>}</p>
+                <button className="btn btn-dark" onClick={getRandomCards}>Restart</button>
+            </div>
+            <div className="container card-container">
+                <div className="scene">
+                    {shuffleCards.length !== 0 &&
+                        shuffleCards.map((card, index) => (
+                            <div key={index} className="card" onClick={() => onClick(index)}>
+                                {
+                                    card.state === 'on' && <img src={getImage(card.name)} height="160px" width="160px" />
+                                }
+                                {
+                                    card.state === 'find' && <img src={getImage(card.name)} height="160px" width="160px" style={{ opacity: 0.6 }} />
+                                }
+                            </div>
+                        ))
+                    }
+                </div>
             </div>
         </div>
     )

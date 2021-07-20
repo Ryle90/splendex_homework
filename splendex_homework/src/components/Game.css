@@ -9,5 +9,11 @@
     min-width: 200px;
     border: solid 1px gray;
     cursor: pointer;
-    margin: 5px
+    margin: 5px;
+    padding: 18px;
+}
+
+.game-stats {
+    display: flex;
+    justify-content: space-around;
 }
