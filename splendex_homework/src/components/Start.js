@@ -18,6 +18,10 @@ export default function Start () {
                 <label htmlFor="deck-size"></label>
                 <select name="deck-size" id="deck-size">
                     <option value="">Select number of card parts</option>
+                    {possibleCardPairs.map(number => 
+                    <option>
+
+                    </option>)}
                 </select>
                 <button>Start new game</button>
             </div>
