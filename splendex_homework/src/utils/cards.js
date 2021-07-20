@@ -1,14 +1,14 @@
 const nameOfCards = [
-    'angular-card',
-    'd3-card',
-    'jenkins-card',
-    'postcss-card',
-    'react-card',
-    'redux-card',
-    'sass-card',
-    'splendex-card',
-    'ts-card',
-    'webpack-card'
+    'angular',
+    'd3',
+    'jenkins',
+    'postcss',
+    'react',
+    'redux',
+    'sass',
+    'splendex',
+    'ts',
+    'webpack'
 ]
 
 export default nameOfCards
